@@ -1,0 +1,3 @@
+# cooley.tech-sample
+flake8==3.7.9
+pylint==2.4.4
