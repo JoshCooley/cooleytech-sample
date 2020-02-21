@@ -1,0 +1,11 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+  "settings": {
+    "SublimeLinter.linters.pylint.python": "~/projects/cooley.tech-sample/bin/python"
+  }
+}
