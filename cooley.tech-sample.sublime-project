@@ -6,6 +6,6 @@
 		}
 	],
   "settings": {
-    "SublimeLinter.linters.pylint.python": "~/projects/cooley.tech-sample/bin/python"
+    "SublimeLinter.linters.pylint.python": "~/projects/cooley.tech-sample/venv/bin/python"
   }
 }
