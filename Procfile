@@ -1,1 +1,1 @@
-web: python -u cooley.tech-sample.py
+web: python -u cooleytech_sample.py
