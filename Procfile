@@ -1,1 +1,1 @@
-web: python -u site.py
+web: python -u cooley.tech-sample.py

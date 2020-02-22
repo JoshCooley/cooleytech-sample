@@ -9,4 +9,4 @@ WORKDIR /${PROJECT_NAME}
 RUN ["pip","install","-r","requirements.txt"]
 
 ENTRYPOINT ["python","-u"]
-CMD ["site.py"]
+CMD ["cooley.tech-sample.py"]
