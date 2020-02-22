@@ -1,4 +1,4 @@
-# cooley.tech
+# cooleytech
 
 Infrastructure-as-code, DevOps, CI/CD, and test automation stuff.
 

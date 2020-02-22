@@ -1,2 +1,2 @@
-# cooley.tech-sample
+# cooleytech-sample
 markdown==3.2.1
