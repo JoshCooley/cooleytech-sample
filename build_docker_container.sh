@@ -34,4 +34,8 @@ done
 
 docker build . \
   --build-arg PROJECT_NAME="$PROJECT_NAME" \
-  --tag "$PROJECT_NAME":build
+  --tag "$PROJECT_NAME":build \
+&& docker run --rm \
+  --name="$PROJECT_NAME_$(git rev-parse HEAD)" \
+  --entrypoint ./test_python.sh \
+  "$PROJECT_NAME":build

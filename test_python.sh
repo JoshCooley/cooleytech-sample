@@ -9,7 +9,7 @@ linters=(flake8 pylint)
 lint_project(){
   case $1 in
     flake8 )  # https://flake8.pycqa.org/en/latest/
-      flake8 --exclude=venv .
+      flake8 .
       ;;
     pylint )  # https://www.pylint.org/
       pylint .
@@ -22,10 +22,12 @@ lint_project(){
   esac
 }
 
-
 if [[ $WITH_VENV == true ]]; then
-  python -m venv venv
-  . venv/bin/activate
+  venv=$(mktemp -d)
+  echo "Creating build venv $venv"
+  python -m venv "$venv"
+  echo 'Activating venv'
+  . "$venv/bin/activate"
 fi
 pip install -r requirements.txt
 pip install -r testing-requirements.txt
@@ -40,6 +42,8 @@ for linter in "${linters[@]}"; do
   fi
 done
 if [[ $WITH_VENV == true ]]; then
+  echo "Deactivating venv $venv"
   deactivate
-  rm -rf venv
+  echo 'Removing venv'
+  rm -rf "$venv"
 fi

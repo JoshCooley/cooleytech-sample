@@ -7,11 +7,11 @@ comprised of the current GIT commit hash and the README.md rendered as HTML.
 import os
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from subprocess import run
-from typing import List
+from textwrap import TextWrapper
 from markdown import markdown
 
 
-def shell_out(command: List[str]) -> str:
+def shell_out(*command: str) -> str:
     "Runs command and returns stdout"
     return run(
         command, capture_output=True, check=True, encoding='utf-8'
@@ -19,13 +19,13 @@ def shell_out(command: List[str]) -> str:
 
 
 PORT = os.getenv("PORT") or 8080
-GIT_URL = shell_out(["git", "config", "--get", "remote.origin.url"])
-GIT_REPO = shell_out(["basename", GIT_URL, ".git"])
-GIT_SHA = shell_out(["git", "rev-parse", "HEAD"])
-README = markdown(open('README.md').read())
+GIT_URL = shell_out("git", "config", "--get", "remote.origin.url")
+GIT_REPO = shell_out("basename", GIT_URL, ".git")
+GIT_SHA = shell_out("git", "rev-parse", "HEAD")
+README = TextWrapper(markdown(open('README.md').read(), tab_length=2),
+                     initial_indent="******")
 
-HTML = """
-<!doctype html>
+HTML = """<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -33,10 +33,10 @@ HTML = """
   </head>
   <body>
     <p>GIT SHA: {}</p>
-    <p>
-      README.md: </n>
-      {}
-    </p>
+    <div>
+      <p>README.md:</p>
+{}
+    </div>
   </body>
 </html>
 """.format(GIT_REPO, GIT_SHA, README)
