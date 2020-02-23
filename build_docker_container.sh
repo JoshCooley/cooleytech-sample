@@ -7,8 +7,8 @@ start_time=$(date +%s)
 print_x_chars(){ head -c "$1" /dev/zero | tr \\0 "$2"; }
 
 echo "
-$(print_x_chars 50 !)
-$(print_x_chars 50 !)
+$(print_x_chars 64 !)
+$(print_x_chars 64 !)
 !!
 !!  Building Docker image ...
 !!
@@ -16,8 +16,8 @@ $(print_x_chars 50 !)
 !!  Git commit hash:  $(git rev-parse HEAD)
 !!  Start time:       $(date -d "@$start_time")
 !!
-$(print_x_chars 50 !)
-$(print_x_chars 50 !)
+$(print_x_chars 64 !)
+$(print_x_chars 64 !)
 "
 
 linters=(dockerfilelint hadolint)
@@ -66,8 +66,8 @@ else
   build_result='Docker image build FAIL! ❌'
 fi
 echo "
-$(print_x_chars 50 !)
-$(print_x_chars 50 !)
+$(print_x_chars 64 !)
+$(print_x_chars 64 !)
 !!
 !!  $build_result
 !!
@@ -77,8 +77,8 @@ $(print_x_chars 50 !)
 !!  End time:         $(date -d "@$end_time")
 !!  Build time:       $build_time
 !!
-$(print_x_chars 50 !)
-$(print_x_chars 50 !)
+$(print_x_chars 64 !)
+$(print_x_chars 64 !)
 "
 
 exit "$exit_code"

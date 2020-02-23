@@ -6,8 +6,8 @@ comprised of the current GIT commit hash and the README.md rendered as HTML.
 
 import os
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from subprocess import run
-from textwrap import TextWrapper
+from bs4 import BeautifulSoup
+from dulwich.repo import Repo
 from markdown import markdown
 
 
@@ -19,27 +19,27 @@ def shell_out(*command: str) -> str:
 
 
 PORT = int(os.getenv("PORT") or 8080)
-GIT_URL = shell_out("git", "config", "--get", "remote.origin.url")
-GIT_REPO = shell_out("basename", GIT_URL, ".git")
-GIT_SHA = shell_out("git", "rev-parse", "HEAD")
-README = TextWrapper(markdown(open('README.md').read(), tab_length=2),
-                     initial_indent="******")
-
-HTML = """<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>{}</title>
-  </head>
-  <body>
-    <p>GIT SHA: {}</p>
-    <div>
-      <p>README.md:</p>
-{}
-    </div>
-  </body>
-</html>
-""".format(GIT_REPO, GIT_SHA, README)
+PROJECT_NAME = os.getenv("PROJECT_NAME") or os.path.basename(os.getcwd())
+GIT_SHA = Repo('.').head().decode()
+README = markdown(open('README.md').read())
+HTML = BeautifulSoup(
+    """<!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>{}</title>
+          </head>
+          <body>
+            <p>GIT SHA: {}</p>
+            <div>
+              <p>README.md:</p>
+              {}
+            </div>
+          </body>
+        </html>
+    """.format(PROJECT_NAME, GIT_SHA, README),
+    features="html.parser"
+).prettify()
 
 
 class MyHandler(BaseHTTPRequestHandler):

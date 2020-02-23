@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 repo_name=$(basename "$(git rev-parse --show-toplevel)")
-PROJECT_NAME=${PROJECT_NAME:=repo_name}
+PROJECT_NAME=${PROJECT_NAME:=$repo_name}
 PROJECT_TYPE=${PROJECT_TYPE:-python}
 WITH_VENV=${WITH_VENV:-true}
 
@@ -20,20 +20,22 @@ lint_project(){
   esac
 }
 
-testers=(web)
+testers=(curl)
 test_project(){
   case $1 in
-    web)
-      echo 1
-      PORT=1234 python -um . & pid=$!
-      echo 2
-      curl --silent --show-error http://localhost:1234/
+    curl )
+      PORT=12345 python -um "$PROJECT_NAME" & pythonpid=$!
+      curl \
+        --silent \
+        --show-error \
+        --connect-timeout 3 \
+        --retry-connrefused \
+        --retry 10 \
+        --retry-delay 3 \
+        http://localhost:12345/
       exit_code=$?
-      echo 4
-      kill "$pid"
-      echo 5
+      kill "$pythonpid"
       return "$exit_code"
-      echo 6
       ;;
     * )
       printf '\nUsage: %s TESTER\nAvailable TESTER: %s' \
