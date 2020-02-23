@@ -8,11 +8,9 @@ WITH_VENV=${WITH_VENV:-true}
 linters=(flake8 pylint)
 lint_project(){
   case $1 in
-    flake8 )  # https://flake8.pycqa.org/en/latest/
-      flake8 .
-      ;;
-    pylint )  # https://www.pylint.org/
-      pylint .
+    # https://flake8.pycqa.org/en/latest/, https://www.pylint.org/
+    flake8 | pylint )
+      $1 .
       ;;
     * )
       printf '\nUsage: %s LINTER\nAvailable LINTERs: %s' \
@@ -29,8 +27,7 @@ if [[ $WITH_VENV == true ]]; then
   echo 'Activating venv'
   . "$venv/bin/activate"
 fi
-pip install -r requirements.txt
-pip install -r testing-requirements.txt
+pip install -r requirements.txt -r testing-requirements.txt
 for linter in "${linters[@]}"; do
   printf '%-50s' "Linting $PROJECT_TYPE with $linter ... "
   if lint=$(lint_project "$linter" 2>&1); then
