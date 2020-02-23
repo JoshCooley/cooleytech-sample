@@ -18,7 +18,7 @@ def shell_out(*command: str) -> str:
     ).stdout.strip()
 
 
-PORT = os.getenv("PORT") or 8080
+PORT = int(os.getenv("PORT") or 8080)
 GIT_URL = shell_out("git", "config", "--get", "remote.origin.url")
 GIT_REPO = shell_out("basename", GIT_URL, ".git")
 GIT_SHA = shell_out("git", "rev-parse", "HEAD")
@@ -59,4 +59,5 @@ def run_server(server_class=HTTPServer, handler_class=MyHandler):
     httpd.serve_forever()
 
 
-run_server()
+if __name__ == "__main__":
+    run_server()
