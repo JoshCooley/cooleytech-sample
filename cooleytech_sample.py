@@ -10,14 +10,6 @@ from bs4 import BeautifulSoup
 from dulwich.repo import Repo
 from markdown import markdown
 
-
-def shell_out(*command: str) -> str:
-    "Runs command and returns stdout"
-    return run(
-        command, capture_output=True, check=True, encoding='utf-8'
-    ).stdout.strip()
-
-
 PORT = int(os.getenv("PORT") or 8080)
 PROJECT_NAME = os.getenv("PROJECT_NAME") or os.path.basename(os.getcwd())
 GIT_SHA = Repo('.').head().decode()
