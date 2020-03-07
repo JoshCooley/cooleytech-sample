@@ -31,6 +31,7 @@ override.tf.json
 # Sublimetext stuff
 *.sublime-workspace
 venv/*
+venv
 
 # Python stuff
 __pycache__/*
