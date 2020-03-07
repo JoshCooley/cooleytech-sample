@@ -45,15 +45,29 @@ test_project(){
   esac
 }
 
-if [[ $WITH_VENV == true ]]; then
-  venv=$(mktemp -d)
-  echo "Creating build venv $venv"
-  python -m venv "$venv"
-  echo 'Activating venv'
-  . "$venv/bin/activate"
-fi
+activate_venv(){
+  if [[ -d venv ]]; then
+    venv=venv
+    echo 'Using existing venv directory ...'
+  elif [[ -e venv || -L venv ]]; then
+    echo "Cannot use venv dir './venv': File exists"
+    exit 1
+  else
+    venv=$(mktemp -d)
+    echo "Creating build venv $venv ..."
+    python -m venv "$venv"
+    echo "Linking ./venv to $venv ..."
+    ln -s "$venv" venv
+  fi
+  echo 'Activating venv ...'
+  . venv/bin/activate
+}
 
+if [[ $WITH_VENV == true ]]; then activate_venv; fi
+echo
+echo 'Installing dependencies ...'
 pip install -r requirements.txt -r testing-requirements.txt
+echo
 for linter in "${linters[@]}"; do
   printf '%-50s' "Linting $PROJECT_TYPE with $linter ... "
   if lint=$(lint_project "$linter" 2>&1); then
@@ -61,6 +75,7 @@ for linter in "${linters[@]}"; do
   else
     echo 'FAILED ❌'
     echo "$lint"
+    echo
     exit 1
   fi
 done
@@ -71,13 +86,10 @@ for tester in "${testers[@]}"; do
   else
     echo 'FAILED ❌'
     echo "$test"
+    echo
     exit 1
   fi
+  echo Done.
+  echo
 done
-
-if [[ $WITH_VENV == true ]]; then
-  echo "Deactivating venv $venv"
-  deactivate
-  echo 'Removing venv'
-  rm -rf "$venv"
-fi
+if [[ $WITH_VENV == true && $venv != venv ]]; then rm -rf "${venv}"; fi
