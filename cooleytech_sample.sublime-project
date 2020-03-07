@@ -4,5 +4,8 @@
 		{
 			"path": "/Users/joshcooley/projects/cooleytech_sample"
 		}
-	]
+	],
+  "settings": {
+      "SublimeLinter.linters.pylint.python": "/Users/joshcooley/projects/cooleytech_sample/venv/bin/python"
+    }
 }
