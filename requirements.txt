@@ -1,4 +1,4 @@
 # cooleytech_sample
-beautifulsoup4==4.9.0
+beautifulsoup4==4.9.1
 dulwich==0.19.16
 markdown==3.2.2
